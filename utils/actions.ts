@@ -10,8 +10,10 @@ type User = {
   lastName: string;
 };
 
-export const createUser = async (formData: FormData) => {
+export const createUser = async (prevState: any, formData: FormData) => {
+  // prevState -> useFormState hook
   "use server";
+  console.log(prevState);
   await new Promise((resolve) => setTimeout(resolve, 3000));
   const firstName = formData.get("firstName") as string;
   const lastName = formData.get("lastName") as string;
@@ -20,16 +22,18 @@ export const createUser = async (formData: FormData) => {
 
   try {
     await saveUser(newUser);
+    // la funzione revalidatePath INVALIDA la cache per
+    // la route specificata quindi forza l'aggiornamento
+    revalidatePath("/actions");
+    return "user created successfully..."; // return per useFormState
   } catch (error) {
     console.log(error);
+    return "filed to create user";
   }
-  // la funzione revalidatePath INVALIDA la cache per
-  // la route specificata quindi forza l'aggiornamento
-  revalidatePath("/actions");
-
   // oppure per aggiornare i dati si può
   // scegliere di rappresentare i dati su una pagina
   // diversa in modo da aggiornare i dati durante il redirect
+  // però non può stare su trycatch
   // redirect("/");
 };
 
