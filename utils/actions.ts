@@ -16,7 +16,15 @@ export const createUser = async (formData: FormData) => {
   // const rawData = Object.fromEntries(formData)   second way to access formData
   const newUser: User = { firstName, lastName, id: Date.now().toString() };
   await saveUser(newUser);
-  revalidatePath("/actions");
+
+  // la funzione revalidatePath INVALIDA la cache per
+  // la route specificata quindi forza l'aggiornamento
+  // revalidatePath("/actions");
+
+  // oppure per aggiornare i dati si può
+  // scegliere di rappresentare i dati su una pagina
+  // diversa in modo da aggiornare i dati durante il redirect
+  redirect("/");
 };
 
 export const fetchUsers = async (): Promise<User[]> => {
