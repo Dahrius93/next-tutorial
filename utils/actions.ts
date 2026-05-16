@@ -2,7 +2,7 @@
 
 import { readFile, writeFile } from "fs/promises";
 import { revalidatePath } from "next/cache";
-import { redirect } from "next/navigation";
+// import { redirect } from "next/navigation";
 
 type User = {
   id: string;
@@ -11,20 +11,26 @@ type User = {
 };
 
 export const createUser = async (formData: FormData) => {
+  "use server";
+  await new Promise((resolve) => setTimeout(resolve, 3000));
   const firstName = formData.get("firstName") as string;
   const lastName = formData.get("lastName") as string;
   // const rawData = Object.fromEntries(formData)   second way to access formData
   const newUser: User = { firstName, lastName, id: Date.now().toString() };
-  await saveUser(newUser);
 
+  try {
+    await saveUser(newUser);
+  } catch (error) {
+    console.log(error);
+  }
   // la funzione revalidatePath INVALIDA la cache per
   // la route specificata quindi forza l'aggiornamento
-  // revalidatePath("/actions");
+  revalidatePath("/actions");
 
   // oppure per aggiornare i dati si può
   // scegliere di rappresentare i dati su una pagina
   // diversa in modo da aggiornare i dati durante il redirect
-  redirect("/");
+  // redirect("/");
 };
 
 export const fetchUsers = async (): Promise<User[]> => {
