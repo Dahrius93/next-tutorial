@@ -11,12 +11,22 @@ const page = async ({ params }: { params: { id: string } }) => {
           <Image
             src={mapsImg}
             alt="maps"
-            priority
             width={192}
             height={192}
             className="w-48 h-48 object-cover rounded"
           />
           <h2>local image</h2>
+        </div>
+        <div>
+          <Image
+            src={url}
+            alt="tour"
+            width={192}
+            height={192}
+            priority
+            className="w-48 h-48 object-cover rounded"
+          />
+          <h2>remote image</h2>
         </div>
       </section>
     </div>
