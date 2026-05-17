@@ -1,16 +1,14 @@
-// esempio middleware
-// il middleware gira prima della pagina e si può
-// usare per cose come
-// auth, redirect, ab/testing, gocalizzazione
+// bloco delle pagine. reindirizzo a "/" se qualcuno prova
+// ad accedere a "/about/:path*", "/tours/:path*"
 
-// in questo esempio, se si naviga su "/about"
-// il middleware intercetta la route enzichè mostrare
-// la pagina "/about" mostra un json con scritto "hello there"
+import { NextResponse } from "next/server";
 
+// This function can be marked `async` if using `await` inside
 export function middleware(request) {
-  return Response.json({ msg: "hello there" });
+  return NextResponse.redirect(new URL("/", request.url));
 }
 
+// See "Matching Paths" below to learn more
 export const config = {
-  matcher: "/about",
+  matcher: ["/about/:path*", "/tours/:path*"],
 };
